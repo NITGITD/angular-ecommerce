@@ -9,16 +9,21 @@ import { map } from 'rxjs/operators';
 })
 export class ProductService {
 
-  private baseUrl = "http://localhost:9090/products";
+  private baseUrl = "http://localhost:9090/api/products";
 
   constructor(private httpClient: HttpClient) { }
 
   getProductList():Observable<Product[]>{
     console.log("calling rest")
-    return this.httpClient.get<Product[]>(this.baseUrl).pipe(map(response=>{
-      return response;
-    }
-      ));
+    return this.httpClient.get<GetResponse>(this.baseUrl).pipe(
+    map(response=> response._embedded.products)
+    );
   }
-  
+
+}
+
+interface GetResponse{
+  _embedded:{
+    products: Product[];
+  }
 }
