@@ -13,18 +13,17 @@ export class ProductService {
 
   private baseUrl = "http://localhost:9090/api/products";
 
-  private categoryUrl ="http://localhost:9090/api/productCategories"; 
+  private categoryUrl ="http://localhost:9090/api/productCategories";
   constructor(private httpClient: HttpClient) { }
 
   getProductList(theCategoryId: number):Observable<Product[]>{
     console.log("calling rest")
-   
+
     const searchUrl = `${this.baseUrl}/search/findByCategoryId?id=${theCategoryId}`;
     return this.httpClient.get<GetResponseProducts>(searchUrl).pipe(
     map(response=> response._embedded.products)
     );
   }
-
 
   getProductCategories():Observable<ProductCategory[]> {
     return this.httpClient.get<GetResponseProductCategory>(this.categoryUrl).pipe(
