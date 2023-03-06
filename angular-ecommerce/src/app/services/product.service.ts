@@ -13,7 +13,7 @@ export class ProductService {
 
   private baseUrl = "http://localhost:9090/api/products";
 
-  private categoryUrl = "http://localhost:9090/api/productCategories";
+  private categoryUrl = "http://localhost:9090/api/product-category";
   constructor(private httpClient: HttpClient) { }
   getProduct(theProductId: number): Observable<Product> {
     const productUrl = `${this.baseUrl}/${theProductId}`;
@@ -21,9 +21,9 @@ export class ProductService {
     return this.httpClient.get<Product>(productUrl);
   }
 
-  getProductListPaginate(thePage:number,
-          thePageSize:number,
-           theCategoryId: number): Observable<GetResponseProducts> {
+  getProductListPaginate(thePage: number,
+    thePageSize: number,
+    theCategoryId: number): Observable<GetResponseProducts> {
     console.log("calling rest")
 
     const searchUrl = `${this.baseUrl}/search/findByCategoryId?id=${theCategoryId}`
@@ -45,6 +45,17 @@ export class ProductService {
     const searchUrl = `${this.baseUrl}/search/findByNameContaining?name=${theKeyword}`;
 
     return this.getProducts(searchUrl);
+  }
+  searchProductsPaginate(thePage: number,
+    thePageSize: number,
+    theKeyword: String): Observable<GetResponseProducts> {
+    console.log("calling rest")
+
+    const searchUrl = `${this.baseUrl}/search/findByNameContaining?name=${theKeyword}`
+      + `&page=${thePage}&size=${thePageSize}`;
+
+    return this.httpClient.get<GetResponseProducts>(searchUrl);
+
   }
 
   private getProducts(searchUrl: string): Observable<Product[]> {
